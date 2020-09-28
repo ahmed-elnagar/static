@@ -1,7 +1,7 @@
 pipeline {
   agent any
   stages {
-    stage ('build') {
+    /*stage ('build') {
       steps {
         sh 'echo "hello world"'
         sh '''
@@ -9,6 +9,17 @@ pipeline {
           ls -lah
           '''
           }
+     }*/
+     stage('Lint HTML') {
+              steps {
+                  sh 'tidy -q -e *.html'}}
+     stage ('upload to AWS') {
+        steps{
+          withAWS(region:'us-east-2',credentials:'aws-static') {
+          sh 'echo "Uploading content with AWS creds"'
+          s3Upload(pathStyleAccessEnabled: true, payloadSigningEnabled: true, file:'index.html', bucket:'udacity-proj03')
+        }
      }
   }
+}
 }
