@@ -10,6 +10,9 @@ pipeline {
           '''
           }
      }*/
+     stage('Lint HTML') {
+              steps {
+                  sh 'jtidy -q -e *.html'}}
      stage ('upload to AWS') {
         steps{
           withAWS(region:'us-east-2',credentials:'aws-static') {
